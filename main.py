@@ -102,7 +102,19 @@ class MyStorage:
     def remove_selected(self):
         self._data = [o for o in self._data if not o.is_selected()]
 
+class Canvas(QWidget):
+    def __init__(self, storage):
+        super().__init__()
+        self.storage = storage
+
+    def paintEvent(self, e):
+        painter = QPainter(self)
+        self.storage.draw_all(painter)
+
 app = QApplication(sys.argv)
 w = QWidget()
 w.show()
 sys.exit(app.exec())
+storage = MyStorage()
+canvas = Canvas(storage)
+canvas.show()
