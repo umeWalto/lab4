@@ -107,9 +107,17 @@ class Canvas(QWidget):
         super().__init__()
         self.storage = storage
 
-    def paintEvent(self, e):
-        painter = QPainter(self)
-        self.storage.draw_all(painter)
+    def mousePressEvent(self, e):
+        x, y = int(e.position().x()), int(e.position().y())
+
+        for obj in reversed(self.storage._data):
+            if obj.contains(x, y):
+                obj.set_selected(True)
+                self.update()
+                return
+
+        self.storage.add(Circle(x, y))
+        self.update()
 
 app = QApplication(sys.argv)
 w = QWidget()
