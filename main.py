@@ -119,6 +119,35 @@ class Canvas(QWidget):
         self.storage.add(Circle(x, y))
         self.update()
 
+    def __init__(self, storage):
+        super().__init__()
+        self.storage = storage
+        self.dragging = None
+        self.last_pos = None
+
+    def mousePressEvent(self, e):
+        x, y = int(e.position().x()), int(e.position().y())
+
+        for obj in reversed(self.storage._data):
+            if obj.contains(x, y):
+                self.dragging = obj
+                self.last_pos = (x, y)
+                obj.set_selected(True)
+                return
+
+    def mouseMoveEvent(self, e):
+        if self.dragging:
+            x, y = int(e.position().x()), int(e.position().y())
+            dx = x - self.last_pos[0]
+            dy = y - self.last_pos[1]
+
+            self.dragging.move(dx, dy, self.width(), self.height())
+            self.last_pos = (x, y)
+            self.update()
+
+    def mouseReleaseEvent(self, e):
+        self.dragging = None
+
 app = QApplication(sys.argv)
 w = QWidget()
 w.show()
