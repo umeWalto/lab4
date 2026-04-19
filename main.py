@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QColorDialog
 from PyQt6.QtGui import QColor, QPainter, QPolygon
 from PyQt6.QtCore import QPoint
 
@@ -119,6 +119,18 @@ class Canvas(QWidget):
         self.storage.add(Circle(x, y))
         self.update()
 
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key.Key_Delete:
+            self.storage.remove_selected()
+
+        elif e.key() == Qt.Key.Key_C:
+            color = QColorDialog.getColor()
+            if color.isValid():
+                for o in self.storage.selected():
+                    o.set_color(color)
+
+    self.canvas.update()
+
     def __init__(self, storage):
         super().__init__()
         self.storage = storage
@@ -167,6 +179,8 @@ class MainWindow(QWidget):
         layout.addWidget(self.canvas)
 
         self.setLayout(layout)
+
+        
 
 app = QApplication(sys.argv)
 w = MainWindow()
