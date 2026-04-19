@@ -81,6 +81,27 @@ class Triangle(Shape):
     def contains(self, x, y):
         return self._x <= x <= self._x + self.size and self._y - self.size <= y <= self._y
 
+class MyStorage:
+    def __init__(self):
+        self._data = []
+
+    def add(self, obj):
+        self._data.append(obj)
+
+    def draw_all(self, painter):
+        for o in self._data:
+            o.draw(painter)
+
+    def clear_selection(self):
+        for o in self._data:
+            o.set_selected(False)
+
+    def selected(self):
+        return [o for o in self._data if o.is_selected()]
+
+    def remove_selected(self):
+        self._data = [o for o in self._data if not o.is_selected()]
+
 app = QApplication(sys.argv)
 w = QWidget()
 w.show()
