@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt6.QtGui import QColor, QPainter, QPolygon
 from PyQt6.QtCore import QPoint
 
@@ -148,8 +148,28 @@ class Canvas(QWidget):
     def mouseReleaseEvent(self, e):
         self.dragging = None
 
+class MainWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Editor")
+
+        self.storage = MyStorage()
+        self.canvas = Canvas(self.storage)
+
+        layout = QVBoxLayout()
+
+        toolbar = QHBoxLayout()
+        for name in ["circle", "square", "triangle"]:
+            btn = QPushButton(name)
+            toolbar.addWidget(btn)
+
+        layout.addLayout(toolbar)
+        layout.addWidget(self.canvas)
+
+        self.setLayout(layout)
+
 app = QApplication(sys.argv)
-w = QWidget()
+w = MainWindow()
 w.show()
 sys.exit(app.exec())
 storage = MyStorage()
